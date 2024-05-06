@@ -78,6 +78,10 @@ class Student:
         # set comments
         self.comments = comments
 
+        self.app_weight = 0
+
+    def addWeight(self, weight):
+        self.app_weight += weight
 
     # this method returns the student's name if print()
     # is called on a Student object

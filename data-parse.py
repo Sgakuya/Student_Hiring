@@ -87,10 +87,7 @@ class DataParser:
 
                 line_count += 1
 
-        count = 1
-        for std in self.students:
-            print(count, std)
-            count += 1
+        
 
     # this method sorts the students by last name, then by first name
     def sort_students(self):
@@ -111,6 +108,11 @@ class DataParser:
                         self.students[i-1] = student
                         self.students[i] = prev_student
                         sort = False
+        count = 1
+        for std in self.students:
+            print(count, std)
+            count += 1
 
 if __name__ == "__main__":
-    DataParser("/Users/sgakuya@middlebury.edu/Downloads/f24.csv")
+    parser = DataParser("/Users/sgakuya@middlebury.edu/Downloads/f24.csv")
+    parser.sort_students()
