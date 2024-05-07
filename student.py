@@ -1,3 +1,32 @@
+# Function to update weights corresponding to respective courses for either roles(ca/grader)
+# lst => the weight list to be updated
+# course => course that specifies location of weight to be updated
+def weightUpdate(course, lst, weight):
+    match course:
+        case "CS 105":
+            lst[0] += weight
+        case "CS 145 / CS 146":
+            lst[1] += weight
+        case "CS 200":
+            lst[2] += weight
+        case "CS 201":
+            lst[3] += weight
+        case "CS 202":
+            lst[4] += weight
+        case "CS 301":
+            lst[5] += weight
+        case "CS 302":
+            lst[6] += weight
+        case "CS 311":
+            lst[7] += weight
+        case "CS 312":
+            lst[8] += weight
+        case "CS 315":
+            lst[9] += weight
+        case "CS 318":
+            lst[10] += weight
+
+    return lst
 class Student:
 
 # email, name, nickname, id_num, courses,
@@ -78,12 +107,29 @@ class Student:
         # set comments
         self.comments = comments
 
-        self.app_weight = 0
+        # add weights depending on preference, availability and experience
+        self.grade_weights = [0,0,0,0,0,0,0,0,0,0,0]
+        self.ca_weights = [0,0,0,0,0,0,0,0,0,0,0]
+        for grd_crse in self.grade_courses:
+            self.grade_weights = weightUpdate(grd_crse, self.grade_weights, 1)
+        for grd_crse in self.grade_experience:
+            self.grade_weights = weightUpdate(grd_crse, self.grade_weights, 1)
+        for ca_crse in self.ca_courses:
+            self.ca_weights = weightUpdate(ca_crse, self.ca_weights, 1)
+        for ca_crse in self.ca_courses:
+            self.ca_weights = weightUpdate(ca_crse, self.ca_weights, 1)
+        for ca_crse in self.ca_inclass:
+            self.ca_weights = weightUpdate(ca_crse, self.ca_weights, 1)
 
-    def addWeight(self, weight):
-        self.app_weight += weight
+
+    def addWeight(self, weight, course, role):
+        fa_24_classes = ["CS 105", "CS 145 / CS 146", "CS 200", "CS 201", "CS 202", "CS 301", "CS 302", "CS 311", "CS 312", "CS 315", "CS 333"]
+        if role == "Grader":
+            self.grade_weights[fa_24_classes.index(course)] += weight
+        else:   
+            self.ca_weights[fa_24_classes.index(course)] += weight
 
     # this method returns the student's name if print()
     # is called on a Student object
     def __str__(self):
-        return (self.name + " => " + self.preference)
+        return (self.name + " => " + str(self.grade_weights[1]))

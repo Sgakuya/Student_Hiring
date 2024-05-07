@@ -1,5 +1,6 @@
-import csv
+import csv, random, json
 from student import Student
+from hiring import HiringAlgorithm, Course
 # /Users/sgakuya@middlebury.edu/Downloads/f24.csv
 
 class DataParser:
@@ -37,12 +38,12 @@ class DataParser:
                         if(i<18):
                             if "experience" in row[i]:
                                 grade_experience.append(fa_24_classes[i-7])
-                            elif "willing" in row[i] or "preferred" in row[i]:
+                            if "willing" in row[i] or "preferred" in row[i]:
                                 grade_courses.append(fa_24_classes[i-7])
                         else:
                             if "experience" in row[i]:
                                 ca_experience.append(fa_24_classes[i-18])
-                            elif "willing" in row[i] or "preferred" in row[i]:
+                            if "willing" in row[i] or "preferred" in row[i]:
                                 ca_courses.append(fa_24_classes[i-18])
 
                     # set courses they can be inclass CAs for
@@ -109,10 +110,59 @@ class DataParser:
                         self.students[i] = prev_student
                         sort = False
         count = 1
-        for std in self.students:
-            print(count, std)
-            count += 1
+        # for std in self.students:
+        #     print(count, std)
+        #     count += 1
 
 if __name__ == "__main__":
     parser = DataParser("/Users/sgakuya@middlebury.edu/Downloads/f24.csv")
-    parser.sort_students()
+    # print(parser.students)
+    # parser.sort_students()
+
+    # Minimal Tests
+    # test_students = parser.students[0:10]
+    # for std in test_students:
+    #     std.grade_weights[1] = random.randint(0,5)
+    #     print(std)
+    # test_courses = [Course(1, 2, 3)]
+    # alg = HiringAlgorithm(test_students, test_courses)
+    # alg.hire()
+    # for crse in test_courses:
+    #     print(crse)
+
+
+    # Courses
+    course_list = []
+    # cs105
+    course_list.append(Course(0, 1, 1))
+    # cs145/cs146
+    course_list.append(Course(1, 5, 8))
+    # cs200
+    course_list.append(Course(2, 3, 4))
+    # cs201
+    course_list.append(Course(3, 3, 8))
+    # cs202
+    course_list.append(Course(4, 3, 3))
+    # cs301
+    course_list.append(Course(5, 3, 3))
+    # cs302
+    course_list.append(Course(6, 3, 2))
+    # cs311
+    course_list.append(Course(7, 0, 1))
+    # cs312
+    course_list.append(Course(8, 3, 3))
+    # cs315
+    course_list.append(Course(9, 0, 2))
+    # cs333
+    course_list.append(Course(10, 0, 1))
+
+    students = parser.students
+
+    for std in students:
+        print(json.dumps(std.__dict__) + "\n")
+    alg = HiringAlgorithm(students, course_list)
+    alg.hire()
+
+    for course in course_list:
+        print(course)
+
