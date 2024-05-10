@@ -1,8 +1,13 @@
-import csv, random, json
+import csv, json
 from student import Student
 from hiring import HiringAlgorithm, Course
-# /Users/sgakuya@middlebury.edu/Downloads/f24.csv
 
+"""
+    Class to read application data from a .csv file and creates relevant Student objects
+    to store the data
+
+    Currently configured to work for Fall '24 courses
+"""
 class DataParser:
     def __init__(self, filename):
         # create an empty list of students
@@ -36,14 +41,14 @@ class DataParser:
                     ca_experience = []
                     for i in range(7,29):
                         if(i<18):
-                            if "experience" in row[i]:
+                            if "e" in row[i]: # experience
                                 grade_experience.append(fa_24_classes[i-7])
-                            if "willing" in row[i] or "preferred" in row[i]:
+                            if "w" in row[i] or "p" in row[i]: # willing or preferred
                                 grade_courses.append(fa_24_classes[i-7])
                         else:
-                            if "experience" in row[i]:
+                            if "e" in row[i]: # experience
                                 ca_experience.append(fa_24_classes[i-18])
-                            if "willing" in row[i] or "preferred" in row[i]:
+                            if "w" in row[i] or "p" in row[i]: # willing or preferred
                                 ca_courses.append(fa_24_classes[i-18])
 
                     # set courses they can be inclass CAs for
@@ -114,24 +119,12 @@ class DataParser:
         #     print(count, std)
         #     count += 1
 
+
+# Runs the hiring algorithm after parsing the information and creating student and course objects
 if __name__ == "__main__":
     parser = DataParser("/Users/sgakuya@middlebury.edu/Downloads/f24.csv")
-    # print(parser.students)
-    # parser.sort_students()
 
-    # Minimal Tests
-    # test_students = parser.students[0:10]
-    # for std in test_students:
-    #     std.grade_weights[1] = random.randint(0,5)
-    #     print(std)
-    # test_courses = [Course(1, 2, 3)]
-    # alg = HiringAlgorithm(test_students, test_courses)
-    # alg.hire()
-    # for crse in test_courses:
-    #     print(crse)
-
-
-    # Courses
+    # Adding courses and instructor preferences fo number of graders and assts
     course_list = []
     # cs105
     course_list.append(Course(0, 1, 1))
@@ -158,6 +151,7 @@ if __name__ == "__main__":
 
     students = parser.students
 
+    # Testing and printing output of algorithm
     for std in students:
         print(json.dumps(std.__dict__) + "\n")
     alg = HiringAlgorithm(students, course_list)

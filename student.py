@@ -1,32 +1,45 @@
-# Function to update weights corresponding to respective courses for either roles(ca/grader)
-# lst => the weight list to be updated
-# course => course that specifies location of weight to be updated
+import re
+
+"""
+ Function to update weights corresponding to respective courses for either roles(ca/grader)
+ lst(int list) => the CA/grader weight list of a particular student. Each index represents a course
+ course(string) => course that specifies location of weight to be updated in lst
+ weight(int) => how much to increment the current weight in the specific class by 
+
+ Note: would need updates to contain different set of courses for different semesters
+"""
 def weightUpdate(course, lst, weight):
-    match course:
-        case "CS 105":
-            lst[0] += weight
-        case "CS 145 / CS 146":
+    if re.search("^CS 105.*", course):
+        lst[0] += weight
+    elif re.search("^CS 145.* | CS 146.*", course):
             lst[1] += weight
-        case "CS 200":
-            lst[2] += weight
-        case "CS 201":
-            lst[3] += weight
-        case "CS 202":
-            lst[4] += weight
-        case "CS 301":
-            lst[5] += weight
-        case "CS 302":
-            lst[6] += weight
-        case "CS 311":
-            lst[7] += weight
-        case "CS 312":
-            lst[8] += weight
-        case "CS 315":
-            lst[9] += weight
-        case "CS 318":
-            lst[10] += weight
+    elif re.search("^CS 200.*", course):
+        lst[2] += weight
+    elif re.search("^CS 201.*", course):
+        lst[3] += weight
+    elif re.search("^CS 202.*", course):
+        lst[4] += weight
+    elif re.search("^CS 301.*", course):
+        lst[5] += weight
+    elif re.search("^CS 302.*", course):
+        lst[6] += weight
+    elif re.search("^CS 311.*", course):
+        lst[7] += weight
+    elif re.search("^CS 312.*", course):
+        lst[8] += weight
+    elif re.search("^CS 315.*", course):
+        lst[9] += weight
+    elif re.search("^CS 333.*", course):
+        lst[10] += weight
 
     return lst
+"""
+    Student class keeps track of each students info 
+    i.e., email, name, nickname/preferred name, id, courses taken 
+    and extra data about the courses they have assisted with and 
+    those they would like to be considered for
+
+"""
 class Student:
 
 # email, name, nickname, id_num, courses,
@@ -57,18 +70,6 @@ class Student:
         # add CS 105 to courses in student has taken 101, 145, or 150
         if 'CS 145' in courses or 'CS 150' in courses:
             courses.append('CS 105')
-
-        # for now we are keeping CS 145 and CS 150 tutors separate... but can change this with
-        # the following code
-
-        # if the student has taken 101/145, allow them to tutor for 150
-        #if ('CS 101' in courses or 'CS 145' in courses) and 'CS 150' not in courses:
-        #    courses.append('CS 150')
-        #
-        # if the student has taken 150, all them to tutor for 101/145
-        #elif 'CS 150' in courses and 'CS 101' not in courses and 'CS 145' not in courses:
-        #    courses.append('CS 101')
-        #    courses.append('CS 145')
 
         # set list of courses a student has taken
         self.courses = courses
@@ -108,6 +109,7 @@ class Student:
         self.comments = comments
 
         # add weights depending on preference, availability and experience
+        # updating weights by 1 if they have experience, willingness, and availability for labs
         self.grade_weights = [0,0,0,0,0,0,0,0,0,0,0]
         self.ca_weights = [0,0,0,0,0,0,0,0,0,0,0]
         for grd_crse in self.grade_courses:
@@ -120,14 +122,6 @@ class Student:
             self.ca_weights = weightUpdate(ca_crse, self.ca_weights, 1)
         for ca_crse in self.ca_inclass:
             self.ca_weights = weightUpdate(ca_crse, self.ca_weights, 1)
-
-
-    def addWeight(self, weight, course, role):
-        fa_24_classes = ["CS 105", "CS 145 / CS 146", "CS 200", "CS 201", "CS 202", "CS 301", "CS 302", "CS 311", "CS 312", "CS 315", "CS 333"]
-        if role == "Grader":
-            self.grade_weights[fa_24_classes.index(course)] += weight
-        else:   
-            self.ca_weights[fa_24_classes.index(course)] += weight
 
     # this method returns the student's name if print()
     # is called on a Student object
